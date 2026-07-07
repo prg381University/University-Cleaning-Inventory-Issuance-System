@@ -1,0 +1,6 @@
+// tells VS Code to pull in any .jar in the lib folder automatically- covers derby.jar and derbytools.jar
+{
+  "java.project.referencedLibraries": [
+    "lib/**/*.jar"
+  ]
+}
