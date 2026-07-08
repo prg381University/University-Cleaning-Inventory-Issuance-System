@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class DBConnection {
 
     // Points to the local embedded Derby database folder
-    private static final String DB_URL = "jdbc:derby:cleaningInventoryDB";
+   private static final String DB_URL = "jdbc:derby:cleaningInventoryDB;create=true";
 
     // Returns a new connection. Called by DAO classes
     public static Connection getConnection() throws SQLException {
