@@ -1,0 +1,38 @@
+<%
+    User loggedInUser = (User) session.getAttribute("loggedInUser");
+    String context = request.getContextPath();
+    String flashMessage = (String) session.getAttribute("flashMessage");
+    String flashType = (String) session.getAttribute("flashType");
+    if (flashMessage != null) {
+        session.removeAttribute("flashMessage");
+        session.removeAttribute("flashType");
+    }
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= e(pageTitle) %> | Cleaning Inventory Auth Module</title>
+    <link rel="stylesheet" href="<%= context %>/assets/css/style.css">
+</head>
+<body>
+<header class="topbar">
+    <div class="brand">University Cleaning Inventory - Authentication Module</div>
+    <% if (loggedInUser != null) { %>
+    <nav class="nav">
+        <a href="<%= context %>/dashboard">Dashboard</a>
+    </nav>
+    <div class="userbox">
+        <span><%= e(loggedInUser.getFullName()) %> (<%= e(loggedInUser.getRole()) %>)</span>
+        <a class="btn btn-light" href="<%= context %>/logout">Logout</a>
+    </div>
+    <% } %>
+</header>
+<main class="container">
+    <% if (flashMessage != null) { %>
+        <div class="alert <%= "success".equals(flashType) ? "alert-success" : "alert-error" %>"><%= e(flashMessage) %></div>
+    <% } %>
+    <% if (request.getAttribute("error") != null) { %>
+        <div class="alert alert-error"><%= e(request.getAttribute("error")) %></div>
+    <% } %>

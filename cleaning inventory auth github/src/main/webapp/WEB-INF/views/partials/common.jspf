@@ -1,0 +1,38 @@
+<%@ page import="java.util.*" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="com.bc.cleaning.model.*" %>
+<%!
+    public String e(Object value) {
+        if (value == null) {
+            return "";
+        }
+        String text = String.valueOf(value);
+        return text.replace("&", "&amp;")
+                   .replace("<", "&lt;")
+                   .replace(">", "&gt;")
+                   .replace("\"", "&quot;")
+                   .replace("'", "&#39;");
+    }
+
+    public String selected(Object current, Object expected) {
+        if (current == null || expected == null) {
+            return "";
+        }
+        return String.valueOf(current).equals(String.valueOf(expected)) ? "selected" : "";
+    }
+
+    public String checked(boolean condition) {
+        return condition ? "checked" : "";
+    }
+
+    public String dateTime(Object value) {
+        if (value == null) {
+            return "";
+        }
+        try {
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm").format(value);
+        } catch (Exception ex) {
+            return String.valueOf(value);
+        }
+    }
+%>
