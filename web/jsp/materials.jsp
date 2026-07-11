@@ -6,7 +6,11 @@
 <%@ include file="includes/footer.jsp" %>
 <body>
 
-<h1>Materials Inventory</h1>
+    <form action="${pageContext.request.contextPath}/MaterialServlet" method="GET" style="margin-bottom: 20px;">
+        <input type="text" name="query" placeholder="Search materials..." value="<%= request.getParameter("query") != null ? request.getParameter("query") : "" %>">
+        <button type="submit" class="btn">Search</button>
+        <a href="${pageContext.request.contextPath}/MaterialServlet?action=list" class="btn" style="background-color: #6b7280; margin-top: 15px;">Clear</a>
+    </form>
 
 <a href="${pageContext.request.contextPath}/jsp/addMaterial.jsp">Add New Material</a>
 <br><br>
