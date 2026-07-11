@@ -89,4 +89,25 @@ public class MaterialDAO {
         }
         return materials;
     }
+    public List<Material> searchMaterials(String query) {
+        List<Material> materials = new ArrayList<>();
+        String sql = "SELECT * FROM Materials WHERE LOWER(name) LIKE LOWER(?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, "%" + query + "%");
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    materials.add(new Material(
+                            rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getInt("quantity"),
+                            rs.getInt("reorderLevel")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return materials;
+    }
 }

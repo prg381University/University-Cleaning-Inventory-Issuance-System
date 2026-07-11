@@ -1,29 +1,36 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
   <title>Add Material</title>
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css?v=<%= System.currentTimeMillis() %>">
 </head>
 <body>
 
-<h1>Add New Material</h1>
+<%@ include file="includes/Header.jsp" %>
+<%@ include file="includes/navbar.jsp" %>
 
-<form action="${pageContext.request.contextPath}/MaterialServlet" method="POST">
-  <input type="hidden" name="action" value="add">
+<div class="container">
+  <h2 class="page-title">Add New Material</h2>
 
-  <label>Item Name:</label>
-  <input type="text" name="name" required><br><br>
+  <form action="${pageContext.request.contextPath}/MaterialServlet" method="POST">
+    <input type="hidden" name="action" value="add">
 
-  <label>Quantity:</label>
-  <input type="number" name="quantity" required><br><br>
+    <label>Item Name:</label>
+    <input type="text" name="name" required>
 
-  <label>Reorder Level:</label>
-  <input type="number" name="reorderLevel" required><br><br>
+    <label>Quantity:</label>
+    <input type="number" name="quantity" required>
 
-  <button type="submit">Save Material</button>
-</form>
+    <label>Reorder Level:</label>
+    <input type="number" name="reorderLevel" required>
 
-<br>
-<a href="${pageContext.request.contextPath}/jsp/materials.jsp">Back to Inventory</a>
+    <button type="submit" class="btn-success">Save Material</button>
+    <a href="${pageContext.request.contextPath}/MaterialServlet?action=list" class="btn" style="background-color: #6b7280;">Cancel</a>
+  </form>
+</div>
+
+<%@ include file="includes/footer.jsp" %>
 
 </body>
 </html>
