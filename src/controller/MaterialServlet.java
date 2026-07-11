@@ -46,8 +46,14 @@ public class MaterialServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
+        String searchQuery = request.getParameter("query");
 
-        if (action == null || "list".equals(action)) {
+        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+            List<Material> materials = materialDAO.searchMaterials(searchQuery);
+            request.setAttribute("materialsList", materials);
+            request.getRequestDispatcher("/jsp/materials.jsp").forward(request, response);
+
+        } else if (action == null || "list".equals(action)) {
             List<Material> materials = materialDAO.getAllMaterials();
             request.setAttribute("materialsList", materials);
             request.getRequestDispatcher("/jsp/materials.jsp").forward(request, response);

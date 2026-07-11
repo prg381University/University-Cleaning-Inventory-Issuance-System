@@ -1,36 +1,40 @@
 <%@ page import="model.Material" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
   <title>Edit Material</title>
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css?v=<%= System.currentTimeMillis() %>">
 </head>
 <body>
 
-<h1>Edit Material</h1>
+<%@ include file="includes/Header.jsp" %>
+<%@ include file="includes/navbar.jsp" %>
 
-<%
-  Material m = (Material) request.getAttribute("material");
-%>
+<div class="container">
+  <h2 class="page-title">Edit Material</h2>
 
-<form action="${pageContext.request.contextPath}/MaterialServlet" method="POST">
-  <input type="hidden" name="action" value="update">
+  <% Material m = (Material) request.getAttribute("material"); %>
 
-  <input type="hidden" name="id" value="<%= m != null ? m.getId() : "" %>">
+  <form action="${pageContext.request.contextPath}/MaterialServlet" method="POST">
+    <input type="hidden" name="action" value="update">
+    <input type="hidden" name="id" value="<%= m != null ? m.getId() : "" %>">
 
-  <label>Item Name:</label>
-  <input type="text" name="name" value="<%= m != null ? m.getName() : "" %>" required><br><br>
+    <label>Item Name:</label>
+    <input type="text" name="name" value="<%= m != null ? m.getName() : "" %>" required>
 
-  <label>Quantity:</label>
-  <input type="number" name="quantity" value="<%= m != null ? m.getQuantity() : "" %>" required><br><br>
+    <label>Quantity:</label>
+    <input type="number" name="quantity" value="<%= m != null ? m.getQuantity() : "" %>" required>
 
-  <label>Reorder Level:</label>
-  <input type="number" name="reorderLevel" value="<%= m != null ? m.getReorderLevel() : "" %>" required><br><br>
+    <label>Reorder Level:</label>
+    <input type="number" name="reorderLevel" value="<%= m != null ? m.getReorderLevel() : "" %>" required>
 
-  <button type="submit">Update Material</button>
-</form>
+    <button type="submit" class="btn">Update Material</button>
+    <a href="${pageContext.request.contextPath}/MaterialServlet?action=list" class="btn" style="background-color: #6b7280;">Cancel</a>
+  </form>
+</div>
 
-<br>
-<a href="${pageContext.request.contextPath}/jsp/materials.jsp">Back to Inventory</a>
+<%@ include file="includes/footer.jsp" %>
 
 </body>
 </html>

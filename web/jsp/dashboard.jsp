@@ -1,6 +1,5 @@
-<%@ include file="header.jsp" %>
-
-<%@ include file="navbar.jsp" %>
+<%@ include file="includes/Header.jsp" %>
+<%@ include file="includes/navbar.jsp" %>
 
 <div class="container">
 
@@ -8,4 +7,4 @@
 
 </div>
 
-<%@ include file="footer.jsp" %>
+<%@ include file="includes/footer.jsp" %>
