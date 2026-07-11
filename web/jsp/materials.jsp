@@ -2,10 +2,9 @@
 <%@ page import="model.Material" %>
 <!DOCTYPE html>
 <html>
+<body>
 <%@ include file="includes/Header.jsp" %>
 <%@ include file="includes/footer.jsp" %>
-<body>
-
 <h1>Materials Inventory</h1>
 
 <a href="${pageContext.request.contextPath}/jsp/addMaterial.jsp">Add New Material</a>
