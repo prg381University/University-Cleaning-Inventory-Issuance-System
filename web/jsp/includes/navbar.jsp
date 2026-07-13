@@ -3,9 +3,9 @@
 <nav>
     <a href="dashboard.jsp">Dashboard</a>
     <a href="${pageContext.request.contextPath}/MaterialServlet?action=list">Materials</a>
-    <a href="suppliers.jsp">Suppliers</a>
-    <a href="cleaners.jsp">Cleaners</a>
-    <a href="issuance.jsp">Stock Issuance</a>
+     <a href="${pageContext.request.contextPath}/SupplierServlet?action=list">Suppliers</a>
+     <a href="${pageContext.request.contextPath}/CleanerServlet?action=list">Cleaners</a>
+    <a href="${pageContext.request.contextPath}/IssuanceServlet?action=list">Stock Issuance</a>
     <a href="reports.jsp">Reports</a>
 
 
