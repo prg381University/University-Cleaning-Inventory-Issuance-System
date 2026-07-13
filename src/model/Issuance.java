@@ -1,73 +1,57 @@
 package model;
 
-import java.sql.Timestamp;
-
-// Represents one row from the issuances table.
 public class Issuance {
-    private int issuanceId;
+    private int id;
     private int materialId;
+    private String materialName;  // For display
     private int cleanerId;
-    private int issuedBy;
-    private int quantityIssued;
-    private Timestamp issueDate;
+    private String cleanerName;   // For display
+    private int quantity;
+    private String issuedDate;
+    private String notes;
 
-    public Issuance() {
-    }
-
-    public Issuance(int issuanceId, int materialId, int cleanerId, int issuedBy, int quantityIssued, Timestamp issueDate) {
-        this.issuanceId = issuanceId;
+    // Constructor for adding (no ID)
+    public Issuance(int materialId, int cleanerId, int quantity, String notes) {
         this.materialId = materialId;
         this.cleanerId = cleanerId;
-        this.issuedBy = issuedBy;
-        this.quantityIssued = quantityIssued;
-        this.issueDate = issueDate;
+        this.quantity = quantity;
+        this.notes = notes;
     }
 
-    public int getIssuanceId() {
-        return issuanceId;
-    }
-
-    public void setIssuanceId(int issuanceId) {
-        this.issuanceId = issuanceId;
-    }
-
-    public int getMaterialId() {
-        return materialId;
-    }
-
-    public void setMaterialId(int materialId) {
+    // Full constructor (for reading from DB)
+    public Issuance(int id, int materialId, String materialName, int cleanerId, String cleanerName, int quantity, String issuedDate, String notes) {
+        this.id = id;
         this.materialId = materialId;
-    }
-
-    public int getCleanerId() {
-        return cleanerId;
-    }
-
-    public void setCleanerId(int cleanerId) {
+        this.materialName = materialName;
         this.cleanerId = cleanerId;
+        this.cleanerName = cleanerName;
+        this.quantity = quantity;
+        this.issuedDate = issuedDate;
+        this.notes = notes;
     }
 
-    public int getIssuedBy() {
-        return issuedBy;
-    }
+    // Getters and Setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setIssuedBy(int issuedBy) {
-        this.issuedBy = issuedBy;
-    }
+    public int getMaterialId() { return materialId; }
+    public void setMaterialId(int materialId) { this.materialId = materialId; }
 
-    public int getQuantityIssued() {
-        return quantityIssued;
-    }
+    public String getMaterialName() { return materialName; }
+    public void setMaterialName(String materialName) { this.materialName = materialName; }
 
-    public void setQuantityIssued(int quantityIssued) {
-        this.quantityIssued = quantityIssued;
-    }
+    public int getCleanerId() { return cleanerId; }
+    public void setCleanerId(int cleanerId) { this.cleanerId = cleanerId; }
 
-    public Timestamp getIssueDate() {
-        return issueDate;
-    }
+    public String getCleanerName() { return cleanerName; }
+    public void setCleanerName(String cleanerName) { this.cleanerName = cleanerName; }
 
-    public void setIssueDate(Timestamp issueDate) {
-        this.issueDate = issueDate;
-    }
+    public int getQuantity() { return quantity; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
+
+    public String getIssuedDate() { return issuedDate; }
+    public void setIssuedDate(String issuedDate) { this.issuedDate = issuedDate; }
+
+    public String getNotes() { return notes; }
+    public void setNotes(String notes) { this.notes = notes; }
 }
