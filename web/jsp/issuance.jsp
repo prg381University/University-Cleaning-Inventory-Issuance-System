@@ -17,7 +17,7 @@
         String error = (String) session.getAttribute("errorMessage");
         if (success != null) {
     %>
-        <div style="color: green; background: #d4edda; padding: 10px; border-radius: 5px;">
+        <div style="color: green; background: #d4edda; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
             <%= success %>
         </div>
     <%
@@ -25,7 +25,7 @@
         }
         if (error != null) {
     %>
-        <div style="color: red; background: #f8d7da; padding: 10px; border-radius: 5px;">
+        <div style="color: red; background: #f8d7da; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
             <%= error %>
         </div>
     <%

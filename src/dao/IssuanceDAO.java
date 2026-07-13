@@ -1,15 +1,20 @@
 package dao;
 
-import model.Issuance;
-import util.DBConnection;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Issuance;
+import util.DBConnection;
+
 public class IssuanceDAO {
 
-    // CREATE: Add a new issuance (and deduct stock)
+    // this method adds a new issuance and automatically deducts stock
+    // it uses a transaction so everything happens together or not at all
     public void addIssuance(Issuance issuance) throws SQLException {
         Connection conn = null;
         PreparedStatement ps1 = null;
@@ -17,9 +22,8 @@ public class IssuanceDAO {
         
         try {
             conn = DBConnection.getConnection();
-            conn.setAutoCommit(false);  // Start transaction
+            conn.setAutoCommit(false);
             
-            // 1. Check if enough stock is available
             String checkSql = "SELECT quantity FROM Materials WHERE id = ?";
             ps1 = conn.prepareStatement(checkSql);
             ps1.setInt(1, issuance.getMaterialId());
@@ -34,14 +38,12 @@ public class IssuanceDAO {
                 throw new SQLException("Not enough stock! Available: " + currentQty);
             }
             
-            // 2. Deduct stock from Materials table
             String updateSql = "UPDATE Materials SET quantity = quantity - ? WHERE id = ?";
             ps2 = conn.prepareStatement(updateSql);
             ps2.setInt(1, issuance.getQuantity());
             ps2.setInt(2, issuance.getMaterialId());
             ps2.executeUpdate();
             
-            // 3. Insert the issuance record
             String insertSql = "INSERT INTO Issuance (materialId, cleanerId, quantity, notes, issuedDate) VALUES (?, ?, ?, ?, CURRENT_DATE)";
             PreparedStatement ps3 = conn.prepareStatement(insertSql);
             ps3.setInt(1, issuance.getMaterialId());
@@ -50,11 +52,11 @@ public class IssuanceDAO {
             ps3.setString(4, issuance.getNotes());
             ps3.executeUpdate();
             
-            conn.commit();  // All succeeded, commit transaction
+            conn.commit();
             
         } catch (SQLException e) {
             if (conn != null) {
-                conn.rollback();  // Rollback on error
+                conn.rollback();
             }
             throw e;
         } finally {
@@ -67,7 +69,7 @@ public class IssuanceDAO {
         }
     }
 
-    // READ: Get all issuances with material and cleaner names
+    // gets all issuances with the material name and cleaner name joined
     public List<Issuance> getAllIssuances() {
         List<Issuance> issuances = new ArrayList<>();
         String sql = "SELECT i.*, m.name as materialName, c.fullName as cleanerName " +
@@ -88,7 +90,7 @@ public class IssuanceDAO {
         return issuances;
     }
 
-    // READ: Get a single issuance by ID
+    // gets a single issuance by its id
     public Issuance getIssuance(int id) {
         String sql = "SELECT i.*, m.name as materialName, c.fullName as cleanerName " +
                      "FROM Issuance i " +
@@ -109,7 +111,7 @@ public class IssuanceDAO {
         return null;
     }
 
-    // DELETE: Delete an issuance (and return stock)
+    // deletes an issuance and returns the stock to materials
     public void deleteIssuance(int id) throws SQLException {
         Connection conn = null;
         PreparedStatement ps1 = null;
@@ -119,7 +121,6 @@ public class IssuanceDAO {
             conn = DBConnection.getConnection();
             conn.setAutoCommit(false);
             
-            // 1. Get the issuance details
             String selectSql = "SELECT materialId, quantity FROM Issuance WHERE id = ?";
             ps1 = conn.prepareStatement(selectSql);
             ps1.setInt(1, id);
@@ -129,14 +130,12 @@ public class IssuanceDAO {
                 int materialId = rs.getInt("materialId");
                 int quantity = rs.getInt("quantity");
                 
-                // 2. Return stock to Materials table
                 String updateSql = "UPDATE Materials SET quantity = quantity + ? WHERE id = ?";
                 ps2 = conn.prepareStatement(updateSql);
                 ps2.setInt(1, quantity);
                 ps2.setInt(2, materialId);
                 ps2.executeUpdate();
                 
-                // 3. Delete the issuance
                 String deleteSql = "DELETE FROM Issuance WHERE id = ?";
                 PreparedStatement ps3 = conn.prepareStatement(deleteSql);
                 ps3.setInt(1, id);
@@ -158,7 +157,7 @@ public class IssuanceDAO {
         }
     }
 
-    // SEARCH: Search issuances by material name or cleaner name
+    // searches issuances by material name or cleaner name
     public List<Issuance> searchIssuances(String query) {
         List<Issuance> issuances = new ArrayList<>();
         if (query == null || query.trim().isEmpty()) {
@@ -187,13 +186,144 @@ public class IssuanceDAO {
         return issuances;
     }
 
-    // Helper: Map ResultSet to Issuance
+    // this method issues stock with auto deduction and records who issued it
+    public void issueStock(int materialId, int cleanerId, int quantity, String notes, int issuedBy) 
+            throws SQLException {
+        
+        Connection conn = null;
+        PreparedStatement checkStmt = null;
+        PreparedStatement updateStmt = null;
+        PreparedStatement insertStmt = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = DBConnection.getConnection();
+            conn.setAutoCommit(false);
+            
+            String checkSql = "SELECT quantity, name FROM Materials WHERE id = ?";
+            checkStmt = conn.prepareStatement(checkSql);
+            checkStmt.setInt(1, materialId);
+            rs = checkStmt.executeQuery();
+            
+            if (!rs.next()) {
+                throw new SQLException("Material not found!");
+            }
+            
+            int currentQty = rs.getInt("quantity");
+            String materialName = rs.getString("name");
+            
+            if (currentQty < quantity) {
+                throw new SQLException("Not enough stock! Available: " + currentQty + ", Requested: " + quantity);
+            }
+            
+            String updateSql = "UPDATE Materials SET quantity = quantity - ? WHERE id = ?";
+            updateStmt = conn.prepareStatement(updateSql);
+            updateStmt.setInt(1, quantity);
+            updateStmt.setInt(2, materialId);
+            int rowsUpdated = updateStmt.executeUpdate();
+            
+            if (rowsUpdated == 0) {
+                throw new SQLException("Failed to update stock!");
+            }
+            
+            String insertSql = "INSERT INTO Issuance (materialId, cleanerId, quantity, notes, issuedDate, issuedBy) " +
+                              "VALUES (?, ?, ?, ?, CURRENT_DATE, ?)";
+            insertStmt = conn.prepareStatement(insertSql);
+            insertStmt.setInt(1, materialId);
+            insertStmt.setInt(2, cleanerId);
+            insertStmt.setInt(3, quantity);
+            insertStmt.setString(4, notes);
+            insertStmt.setInt(5, issuedBy);
+            insertStmt.executeUpdate();
+            
+            conn.commit();
+            System.out.println("Stock issued successfully: " + quantity + " x " + materialName);
+            
+        } catch (SQLException e) {
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                    System.out.println("Transaction rolled back: " + e.getMessage());
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            throw e;
+        } finally {
+            if (rs != null) try { rs.close(); } catch (SQLException e) {}
+            if (checkStmt != null) try { checkStmt.close(); } catch (SQLException e) {}
+            if (updateStmt != null) try { updateStmt.close(); } catch (SQLException e) {}
+            if (insertStmt != null) try { insertStmt.close(); } catch (SQLException e) {}
+            if (conn != null) {
+                conn.setAutoCommit(true);
+                conn.close();
+            }
+        }
+    }
+
+    // this method returns stock when an issuance is deleted
+    public void returnStock(int issuanceId) throws SQLException {
+        Connection conn = null;
+        PreparedStatement selectStmt = null;
+        PreparedStatement updateStmt = null;
+        PreparedStatement deleteStmt = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = DBConnection.getConnection();
+            conn.setAutoCommit(false);
+            
+            String selectSql = "SELECT materialId, quantity FROM Issuance WHERE id = ?";
+            selectStmt = conn.prepareStatement(selectSql);
+            selectStmt.setInt(1, issuanceId);
+            rs = selectStmt.executeQuery();
+            
+            if (!rs.next()) {
+                throw new SQLException("Issuance not found!");
+            }
+            
+            int materialId = rs.getInt("materialId");
+            int quantity = rs.getInt("quantity");
+            
+            String updateSql = "UPDATE Materials SET quantity = quantity + ? WHERE id = ?";
+            updateStmt = conn.prepareStatement(updateSql);
+            updateStmt.setInt(1, quantity);
+            updateStmt.setInt(2, materialId);
+            updateStmt.executeUpdate();
+            
+            String deleteSql = "DELETE FROM Issuance WHERE id = ?";
+            deleteStmt = conn.prepareStatement(deleteSql);
+            deleteStmt.setInt(1, issuanceId);
+            deleteStmt.executeUpdate();
+            
+            conn.commit();
+            System.out.println("Stock returned successfully for issuance: " + issuanceId);
+            
+        } catch (SQLException e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            }
+            throw e;
+        } finally {
+            if (rs != null) try { rs.close(); } catch (SQLException e) {}
+            if (selectStmt != null) try { selectStmt.close(); } catch (SQLException e) {}
+            if (updateStmt != null) try { updateStmt.close(); } catch (SQLException e) {}
+            if (deleteStmt != null) try { deleteStmt.close(); } catch (SQLException e) {}
+            if (conn != null) {
+                conn.setAutoCommit(true);
+                conn.close();
+            }
+        }
+    }
+
+    // helper method that maps a database row to an issuance object
     private Issuance map(ResultSet rs) throws SQLException {
         return new Issuance(
             rs.getInt("id"),
             rs.getInt("materialId"),
             rs.getString("materialName"),
             rs.getInt("cleanerId"),
+         
             rs.getString("cleanerName"),
             rs.getInt("quantity"),
             rs.getString("issuedDate"),
