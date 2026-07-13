@@ -3,12 +3,14 @@ package model;
 public class Issuance {
     private int id;
     private int materialId;
-    private String materialName;  // For display
+    private String materialName;
     private int cleanerId;
-    private String cleanerName;   // For display
+    private String cleanerName;
     private int quantity;
     private String issuedDate;
     private String notes;
+    private int issuedBy;
+    private String issuedByName;
 
     // Constructor for adding (no ID)
     public Issuance(int materialId, int cleanerId, int quantity, String notes) {
@@ -19,7 +21,8 @@ public class Issuance {
     }
 
     // Full constructor (for reading from DB)
-    public Issuance(int id, int materialId, String materialName, int cleanerId, String cleanerName, int quantity, String issuedDate, String notes) {
+    public Issuance(int id, int materialId, String materialName, int cleanerId, 
+                    String cleanerName, int quantity, String issuedDate, String notes) {
         this.id = id;
         this.materialId = materialId;
         this.materialName = materialName;
@@ -28,6 +31,23 @@ public class Issuance {
         this.quantity = quantity;
         this.issuedDate = issuedDate;
         this.notes = notes;
+        // removed issuedBy and issuedByName - they're not in the parameters
+    }
+
+    // Full constructor with issuedBy (for when we have user info)
+    public Issuance(int id, int materialId, String materialName, int cleanerId, 
+                    String cleanerName, int quantity, String issuedDate, String notes, 
+                    int issuedBy, String issuedByName) {
+        this.id = id;
+        this.materialId = materialId;
+        this.materialName = materialName;
+        this.cleanerId = cleanerId;
+        this.cleanerName = cleanerName;
+        this.quantity = quantity;
+        this.issuedDate = issuedDate;
+        this.notes = notes;
+        this.issuedBy = issuedBy;
+        this.issuedByName = issuedByName;
     }
 
     // Getters and Setters
@@ -54,4 +74,10 @@ public class Issuance {
 
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
+
+    public int getIssuedBy() { return issuedBy; }
+    public void setIssuedBy(int issuedBy) { this.issuedBy = issuedBy; }
+
+    public String getIssuedByName() { return issuedByName; }
+    public void setIssuedByName(String issuedByName) { this.issuedByName = issuedByName; }
 }
