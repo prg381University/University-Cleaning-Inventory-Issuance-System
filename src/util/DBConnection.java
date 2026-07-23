@@ -23,19 +23,60 @@ public class DBConnection {
     }
 
     private static void createTableIfNotExists(Connection conn) {
-        String sql = "CREATE TABLE Materials ("
+        String materialsSql = "CREATE TABLE Materials ("
                 + "id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1), "
                 + "name VARCHAR(100), "
                 + "quantity INT, "
                 + "reorderLevel INT)";
 
+        String usersSql = "CREATE TABLE users ("
+                + "user_id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1), "
+                + "username VARCHAR(100) UNIQUE NOT NULL, "
+                + "password VARCHAR(255) NOT NULL, "
+                + "email VARCHAR(100) UNIQUE NOT NULL, "
+                + "full_name VARCHAR(100), "
+                + "role VARCHAR(20) NOT NULL)";
+
+        String suppliersSql = "CREATE TABLE Suppliers ("
+                + "supplierId INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1), "
+                + "supplierName VARCHAR(100), "
+                + "contactPerson VARCHAR(100), "
+                + "phone VARCHAR(20), "
+                + "email VARCHAR(100), "
+                + "address VARCHAR(255))";
+
+        String cleanersSql = "CREATE TABLE Cleaners ("
+                + "id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1), "
+                + "fullName VARCHAR(100), "
+                + "department VARCHAR(50), "
+                + "phone VARCHAR(20), "
+                + "email VARCHAR(100))";
+
+        String issuancesSql = "CREATE TABLE Issuance ("
+                + "id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1), "
+                + "materialId INT, "
+                + "cleanerId INT, "
+                + "quantity INT, "
+                + "notes VARCHAR(255), "
+                + "issuedDate DATE, "
+                + "issuedBy INT)";
+
         try (Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
-            System.out.println("Materials table successfully created.");
-        } catch (SQLException e) {
-            if (!e.getSQLState().equals("X0Y32")) {
-                e.printStackTrace();
+            String[] tables = {materialsSql, usersSql, suppliersSql, cleanersSql, issuancesSql};
+
+            for (String sql : tables) {
+                try {
+                    stmt.execute(sql);
+                } catch (SQLException e) {
+                    if (!e.getSQLState().equals("X0Y32")) {
+                        e.printStackTrace();
+                    }
+                }
             }
+            System.out.println("Database tables checked/created successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
+// pain

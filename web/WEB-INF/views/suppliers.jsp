@@ -2,26 +2,30 @@
 <%@ page import="model.Supplier" %>
 <!DOCTYPE html>
 <html>
-<%@ include file="includes/Header.jsp" %>
-<%@ include file="includes/navbar.jsp" %>
+<head>
+    <title>Suppliers Management</title>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css?v=<%= System.currentTimeMillis() %>">
+</head>
 <body>
 
-    <h2>Suppliers Management</h2>
+<%@ include file="includes/Header.jsp" %>
+<%@ include file="includes/navbar.jsp" %>
 
-    <!-- Search Form -->
+<div class="container">
+    <h2 class="page-title">Suppliers Management</h2>
+
     <form action="${pageContext.request.contextPath}/SupplierServlet" method="GET" style="margin-bottom: 20px;">
-        <input type="text" name="query" placeholder="Search suppliers..." 
+        <input type="text" name="query" placeholder="Search suppliers..."
                value="<%= request.getParameter("query") != null ? request.getParameter("query") : "" %>">
         <button type="submit" class="btn">Search</button>
         <a href="${pageContext.request.contextPath}/SupplierServlet?action=list" class="btn" style="background-color: #6b7280; margin-top: 15px;">Clear</a>
     </form>
 
-    <!-- Add New Supplier Link -->
-    <a href="${pageContext.request.contextPath}/jsp/addSupplier.jsp">Add New Supplier</a>
+    <a href="${pageContext.request.contextPath}/WEB-INF/views/addSupplier.jsp" class="btn btn-success">Add New Supplier</a>
     <br><br>
 
-    <!-- Suppliers Table -->
-    <table border="1">
+    <table>
+        <thead>
         <tr>
             <th>ID</th>
             <th>Name</th>
@@ -29,9 +33,12 @@
             <th>Phone</th>
             <th>Email</th>
             <th>Address</th>
+            <% if (isSupervisor) { %>
             <th>Actions</th>
+            <% }%>
         </tr>
-
+        </thead>
+        <tbody>
         <%
             List<Supplier> list = (List<Supplier>) request.getAttribute("suppliersList");
             if (list == null || list.isEmpty()) {
@@ -49,17 +56,20 @@
             <td><%= s.getPhone() %></td>
             <td><%= s.getEmail() %></td>
             <td><%= s.getAddress() %></td>
+            <% if (isSupervisor) { %>
             <td>
-                <a href="${pageContext.request.contextPath}/SupplierServlet?action=edit&id=<%= s.getSupplierId() %>">Edit</a> |
-                <a href="${pageContext.request.contextPath}/SupplierServlet?action=delete&id=<%= s.getSupplierId() %>" 
-                   onclick="return confirm('Delete this supplier?')">Delete</a>
+                <a href="${pageContext.request.contextPath}/SupplierServlet?action=edit&id=<%= s.getSupplierId() %>" class="btn" style="padding: 5px 10px; margin: 0;">Edit</a>
+                <a href="${pageContext.request.contextPath}/SupplierServlet?action=delete&id=<%= s.getSupplierId() %>" class="btn btn-danger" style="padding: 5px 10px; margin: 0;" onclick="return confirm('Delete this supplier?')">Delete</a>
             </td>
+            <% } %>
         </tr>
         <%
                 }
             }
         %>
+        </tbody>
     </table>
+</div>
 
 <%@ include file="includes/footer.jsp" %>
 </body>

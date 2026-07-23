@@ -94,7 +94,7 @@ public class IssuanceServlet extends HttpServlet {
             }
             
             // forward to the jsp page to display the data
-            request.getRequestDispatcher("/jsp/issuance.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/issuance.jsp").forward(request, response);
             
         } else if ("delete".equals(action)) {
             // user wants to delete an issuance
@@ -138,7 +138,7 @@ public class IssuanceServlet extends HttpServlet {
             }
             
             // forward to the jsp page
-            request.getRequestDispatcher("/jsp/issuance.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/issuance.jsp").forward(request, response);
         }
     }
 }

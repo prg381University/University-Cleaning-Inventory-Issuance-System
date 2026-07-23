@@ -1,3 +1,4 @@
+<%@ page import="model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -6,7 +7,7 @@
     <title>University Cleaning Inventory System</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css?v=<%= System.currentTimeMillis() %>">
 </head>
-<body>
+<body class="<%= (session.getAttribute("loggedInUser") != null && "SUPERVISOR".equals(((User)session.getAttribute("loggedInUser")).getRole())) ? "supervisor-theme" : "" %>">
 <header>
     <h1>University Cleaning Inventory & Issuance System</h1>
     <p>Staff Inventory Management Portal</p>

@@ -58,7 +58,7 @@ public class CleanerServlet extends HttpServlet {
         if (action == null || "list".equals(action)) {
             List<Cleaner> cleaners = cleanerDAO.getAllCleaners();
             request.setAttribute("cleanersList", cleaners);
-            request.getRequestDispatcher("/jsp/cleaners.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/cleaners.jsp").forward(request, response);
 
         } else if ("delete".equals(action)) {
             int id = Integer.parseInt(request.getParameter("id"));
@@ -69,13 +69,13 @@ public class CleanerServlet extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
             Cleaner existingCleaner = cleanerDAO.getCleaner(id);
             request.setAttribute("cleaner", existingCleaner);
-            request.getRequestDispatcher("/jsp/editCleaner.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/editCleaner.jsp").forward(request, response);
 
         } else if ("search".equals(action)) {
             String query = request.getParameter("query");
             List<Cleaner> cleaners = cleanerDAO.searchCleaners(query);
             request.setAttribute("cleanersList", cleaners);
-            request.getRequestDispatcher("/jsp/cleaners.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/cleaners.jsp").forward(request, response);
         }
     }
 }

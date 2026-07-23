@@ -1,23 +1,23 @@
 package controller;
 
-import dao.CleanerDAO;
-import dao.MaterialDAO;
-import dao.SupplierDAO;
-
+import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
-@WebServlet(urlPatterns = {"", "/HomeServlet"})
-public class HomeServlet extends HttpServlet {
+
+import dao.*;
+
+@WebServlet("/ReportServlet")
+public class ReportServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
+
         if (session.getAttribute("loggedInUser") == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            response.sendRedirect(request.getContextPath() + "/AuthServlet");
             return;
         }
 
@@ -33,7 +33,6 @@ public class HomeServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-
-        request.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/reports.jsp").forward(request, response);
     }
 }

@@ -50,7 +50,7 @@ public class MaterialServlet extends HttpServlet {
         if (action == null || "list".equals(action)) {
             List<Material> materials = materialDAO.getAllMaterials();
             request.setAttribute("materialsList", materials);
-            request.getRequestDispatcher("/jsp/materials.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/materials.jsp").forward(request, response);
 
         } else if ("delete".equals(action)) {
             int id = Integer.parseInt(request.getParameter("id"));
@@ -61,7 +61,7 @@ public class MaterialServlet extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
             Material existingMaterial = materialDAO.getMaterial(id);
             request.setAttribute("material", existingMaterial);
-            request.getRequestDispatcher("/jsp/editMaterial.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/editMaterial.jsp").forward(request, response);
         }
     }
 }

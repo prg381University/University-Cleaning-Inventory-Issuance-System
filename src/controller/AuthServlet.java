@@ -1,9 +1,9 @@
-package com.bc.cleaning.servlet;
+package controller;
 
-import com.bc.cleaning.dao.UserDAO;
-import com.bc.cleaning.model.User;
+import dao.UserDAO;
+import model.User;
 import com.bc.cleaning.util.PasswordUtil;
-import com.bc.cleaning.util.ServletUtil;
+import util.ServletUtil;
 import com.bc.cleaning.util.ValidationUtil;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -32,7 +32,7 @@ public class AuthServlet extends HttpServlet {
         }
 
         if (ServletUtil.getLoggedInUser(request) != null && !"/register".equals(path)) {
-            response.sendRedirect(request.getContextPath() + "/dashboard");
+            response.sendRedirect(request.getContextPath() + "/");
             return;
         }
 
@@ -69,7 +69,7 @@ public class AuthServlet extends HttpServlet {
             HttpSession session = request.getSession(true);
             session.setAttribute("loggedInUser", user);
             session.setMaxInactiveInterval(30 * 60);
-            response.sendRedirect(request.getContextPath() + "/dashboard");
+            response.sendRedirect(request.getContextPath() + "/");
         } catch (IllegalArgumentException | SQLException ex) {
             request.setAttribute("error", ex.getMessage());
             request.setAttribute("username", username);
