@@ -1,7 +1,7 @@
-package com.bc.cleaning.dao;
+package dao;
 
-import com.bc.cleaning.config.DBConnection;
-import com.bc.cleaning.model.User;
+import util.DBConnection;
+import model.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class UserDAO {
     public boolean create(User user) throws SQLException {
-        String sql = "INSERT INTO users (username, email, password_hash, full_name, role) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users (username, email, password, full_name, role) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getEmail());
@@ -55,10 +55,9 @@ public class UserDAO {
         user.setUserId(rs.getInt("user_id"));
         user.setUsername(rs.getString("username"));
         user.setEmail(rs.getString("email"));
-        user.setPasswordHash(rs.getString("password_hash"));
+        user.setPasswordHash(rs.getString("password"));
         user.setFullName(rs.getString("full_name"));
         user.setRole(rs.getString("role"));
-        user.setCreatedAt(rs.getTimestamp("created_at"));
         return user;
     }
 }

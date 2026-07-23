@@ -1,14 +1,21 @@
+<%
+    if (session.getAttribute("loggedInUser") != null) {
+        response.sendRedirect(request.getContextPath() + "/dashboard");
+    } else {
+        response.sendRedirect(request.getContextPath() + "/login");
+    }
+%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Dashboard - Inventory System</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/WEB-INF/css/styles.css">
 </head>
 <body>
 
-<%@ include file="jsp/includes/Header.jsp" %>
-<%@ include file="jsp/includes/navbar.jsp" %>
+<%@ include file="/WEB-INF/views/includes/Header.jsp" %>
+<%@ include file="/WEB-INF/views/includes/navbar.jsp" %>
 
 <div class="container">
     <h2 class="page-title">Dashboard Overview</h2>
@@ -40,7 +47,7 @@
     </div>
 </div>
 
-<%@ include file="jsp/includes/footer.jsp" %>
+<%@ include file="/WEB-INF/views/includes/footer.jsp" %>
 
 </body>
 </html>

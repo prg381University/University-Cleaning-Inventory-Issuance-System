@@ -1,4 +1,4 @@
-package com.bc.cleaning.model;
+package model;
 
 import java.sql.Timestamp;
 

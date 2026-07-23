@@ -1,6 +1,6 @@
-package com.bc.cleaning.util;
+package util;
 
-import com.bc.cleaning.model.User;
+import model.User;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 

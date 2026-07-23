@@ -40,7 +40,7 @@ public class SupplierServlet extends HttpServlet {
         if (action == null || "list".equals(action)) {
             List<Supplier> suppliers = supplierDAO.getAllSuppliers();
             request.setAttribute("suppliersList", suppliers);
-            request.getRequestDispatcher("/jsp/suppliers.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/suppliers.jsp").forward(request, response);
 
         } else if ("delete".equals(action)) {
             int id = Integer.parseInt(request.getParameter("id"));
@@ -51,13 +51,13 @@ public class SupplierServlet extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
             Supplier existingSupplier = supplierDAO.getSupplierById(id);
             request.setAttribute("editSupplier", existingSupplier);
-            request.getRequestDispatcher("/jsp/editSupplier.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/editSupplier.jsp").forward(request, response);
 
         } else if ("search".equals(action)) {
             String query = request.getParameter("query");
             List<Supplier> suppliers = supplierDAO.searchSuppliers(query);
             request.setAttribute("suppliersList", suppliers);
-            request.getRequestDispatcher("/jsp/suppliers.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/suppliers.jsp").forward(request, response);
         }
     }
 
