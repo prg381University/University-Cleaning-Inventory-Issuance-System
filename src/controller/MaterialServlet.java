@@ -52,6 +52,9 @@ public class MaterialServlet extends HttpServlet {
             request.setAttribute("materialsList", materials);
             request.getRequestDispatcher("/WEB-INF/views/materials.jsp").forward(request, response);
 
+        } else if ("add".equals(action)) {
+            request.getRequestDispatcher("/WEB-INF/views/addMaterial.jsp").forward(request, response);
+
         } else if ("delete".equals(action)) {
             int id = Integer.parseInt(request.getParameter("id"));
             materialDAO.deleteMaterial(id);

@@ -60,6 +60,9 @@ public class CleanerServlet extends HttpServlet {
             request.setAttribute("cleanersList", cleaners);
             request.getRequestDispatcher("/WEB-INF/views/cleaners.jsp").forward(request, response);
 
+        }  else if ("add".equals(action)) {
+            request.getRequestDispatcher("/WEB-INF/views/addCleaner.jsp").forward(request, response);
+
         } else if ("delete".equals(action)) {
             int id = Integer.parseInt(request.getParameter("id"));
             cleanerDAO.deleteCleaner(id);

@@ -42,6 +42,9 @@ public class SupplierServlet extends HttpServlet {
             request.setAttribute("suppliersList", suppliers);
             request.getRequestDispatcher("/WEB-INF/views/suppliers.jsp").forward(request, response);
 
+        }  else if ("add".equals(action)) {
+            request.getRequestDispatcher("/WEB-INF/views/addSupplier.jsp").forward(request, response);
+
         } else if ("delete".equals(action)) {
             int id = Integer.parseInt(request.getParameter("id"));
             supplierDAO.deleteSupplier(id);

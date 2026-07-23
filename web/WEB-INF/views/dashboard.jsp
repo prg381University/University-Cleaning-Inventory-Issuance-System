@@ -58,8 +58,8 @@
         %>
         <tr>
             <td><%= issue.getId() %></td>
-            <td><%= issue.getCleanerId() %></td>
-            <td><%= issue.getMaterialId() %></td>
+            <td><%= issue.getCleanerName() %></td>
+            <td><%= issue.getMaterialName() %></td>
             <td><%= issue.getQuantity() %></td>
             <td><%= issue.getIssuedDate() %></td>
         </tr>

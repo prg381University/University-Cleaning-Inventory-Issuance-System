@@ -22,7 +22,7 @@
         <a href="${pageContext.request.contextPath}/CleanerServlet?action=list" class="btn" style="background-color: #6b7280; margin-top: 15px;">Clear</a>
     </form>
 
-    <a href="${pageContext.request.contextPath}/WEB-INF/views/includes/addCleaner.jspudes/addCleaner.jsp" class="btn btn-success">Add New Cleaner</a>
+    <a href="${pageContext.request.contextPath}/CleanerServlet?action=add" class="btn btn-success">Add New Cleaner</a>
     <br><br>
 
     <table>

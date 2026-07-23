@@ -134,7 +134,7 @@
     </table>
 
     <br>
-    <a href="${pageContext.request.contextPath}/WEB-INF/views/dashboard.jsp" class="btn" style="background-color: #6b7280;">Back to Dashboard</a>
+    <a href="${pageContext.request.contextPath}/HomeServlet" class="btn" style="background-color: #6b7280;">Back to Dashboard</a>
 </div>
 
 <%@ include file="includes/footer.jsp" %>
