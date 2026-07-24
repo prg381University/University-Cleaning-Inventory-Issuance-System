@@ -21,7 +21,7 @@
         <a href="${pageContext.request.contextPath}/MaterialServlet?action=list" class="btn" style="background-color: #6b7280; margin-top: 15px;">Clear</a>
     </form>
 
-    <a href="${pageContext.request.contextPath}/WEB-INF/views/addMaterial.jsp" class="btn btn-success">Add New Material</a>
+    <a href="${pageContext.request.contextPath}/MaterialServlet?action=add" class="btn btn-success">Add New Material</a>
     <br><br>
 
     <table>

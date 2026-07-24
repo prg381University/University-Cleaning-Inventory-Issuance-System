@@ -92,7 +92,7 @@ public class MaterialDAO {
 
     public List<Material> getAllLowStock() {
         List<Material> lowStockList = new ArrayList<>();
-        String query = "SELECT * FROM materials WHERE quantity <= reorder_level";
+        String query = "SELECT * FROM Materials WHERE quantity <= reorderLevel";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(query);

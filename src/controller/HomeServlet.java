@@ -1,6 +1,7 @@
 package controller;
 
 import dao.CleanerDAO;
+import dao.IssuanceDAO;
 import dao.MaterialDAO;
 import dao.SupplierDAO;
 
@@ -25,10 +26,12 @@ public class HomeServlet extends HttpServlet {
             MaterialDAO materialDAO = new MaterialDAO();
             CleanerDAO cleanerDAO = new CleanerDAO();
             SupplierDAO supplierDAO = new SupplierDAO();
+            IssuanceDAO issuanceDAO = new IssuanceDAO();
             request.setAttribute("totalMaterials", materialDAO.getAllMaterials().size());
             request.setAttribute("totalCleaners", cleanerDAO.getAllCleaners().size());
             request.setAttribute("totalSuppliers", supplierDAO.getAllSuppliers().size());
             request.setAttribute("lowStock", materialDAO.getAllLowStock().size());
+            request.setAttribute("recentIssuances", issuanceDAO.getAllIssuances());
         } catch (Exception e) {
             e.printStackTrace();
         }

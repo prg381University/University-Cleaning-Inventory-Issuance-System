@@ -21,7 +21,7 @@
         <a href="${pageContext.request.contextPath}/SupplierServlet?action=list" class="btn" style="background-color: #6b7280; margin-top: 15px;">Clear</a>
     </form>
 
-    <a href="${pageContext.request.contextPath}/WEB-INF/views/addSupplier.jsp" class="btn btn-success">Add New Supplier</a>
+    <a href="${pageContext.request.contextPath}/SupplierServlet?action=add" class="btn btn-success">Add New Supplier</a>
     <br><br>
 
     <table>
